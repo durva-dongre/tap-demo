@@ -1,0 +1,240 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "course_id": "science",
+    "course_display": "🔬 Science",
+    "description": "Two-unit science course covering the water cycle and states of matter for young learners.",
+    "nextjs_notes": [
+      "Import as a static JSON or fetch from /api/courses/science.",
+      "Index units by units[current_unit_index].",
+      "VideoPlayer props: { title, youtube_url, points, audio_location, voice_text }",
+      "SubmissionCard props: { prompt, voice_text, emoji_options[], reference_submissions[], audio_location }",
+      "QuizQuestion props: { question, voice_text, options[], correct_option, audio_location }",
+      "QuizFeedback props (shown on wrong answer): { consolation, consolation_voice_text, audio_location_consolation, audio_location_cheer_up, hint, hint_voice_text, audio_location_hint, explanation, explanation_voice_text, audio_location_explanation }",
+      "voice_text fields are the spoken-aloud script for their sibling text field, written naturally for TTS.",
+      "audio_location_cheer_up is a short distinct pep-talk clip played after the consolation voice line and before the hint is revealed.",
+      "After a quiz finishes, post { unit_id, q1_correct, q2_correct, q3_correct } to /api/progress.",
+      "After a submission, post { unit_id, emoji_chosen } to /api/submissions."
+    ]
+  },
+
+  "course_id": "science",
+  "course_display": "🔬 Science",
+  "units": [
+
+    {
+      "unit_index": 0,
+      "unit_id": "sci-water-cycle-u1",
+      "unit_name": "The Water Cycle",
+      "audio_location": "",
+
+      "video": {
+        "title": "Where Does Rain Come From? 🌧️",
+        "description": "Follow a single drop of water as it travels from the ocean all the way to a rain cloud and back again. You'll never look at a puddle the same way!",
+        "voice_text": "Hey — quick question before we start. Have you ever wondered where rain actually comes from? Like, who refills the clouds? Spoiler: it's been the same water going round and round for millions of years. Pretty wild, right? Let's follow one tiny water drop on its big adventure and find out exactly how that works.",
+        "youtube_url": "https://www.youtube.com/watch?v=3z_7ckQYScQ",
+        "points": 10,
+        "audio_location": "",
+        "render_key": "sci-water-cycle-u1-video"
+      },
+
+      "submission": {
+        "prompt": "Draw the water cycle in your notebook — show the sun, clouds, rain, and a river. Label at least two steps. Click a photo and share it! 🌊",
+        "voice_text": "Alright, grab a pencil — this is your moment to be a scientist-artist. Draw the water cycle: sun, clouds, rain, a river or ocean. Label at least two steps — even a rough sketch totally counts. When you're done, snap a photo and share it. I want to see your version of the world's greatest recycling system!",
+        "audio_location": "",
+        "points": 20,
+        "emoji_options": [
+          { "emoji": "🌊", "label": "I loved it!" },
+          { "emoji": "🤔", "label": "A bit confusing" },
+          { "emoji": "😴", "label": "Needs more action" }
+        ],
+        "reference_submissions": [
+          { "title": "Priya's Cycle Diagram", "description": "A clear diagram showing evaporation from the sea, cloud formation, and rainfall back to a river.", "image_url": null },
+          { "title": "Rohan's Colour Drawing", "description": "A colourful drawing with the sun in the corner, arrows going up from a lake and arrows coming down as rain.", "image_url": null },
+          { "title": "Aisha's Labelled Sketch", "description": "A simple pencil sketch with four steps neatly labelled: Evaporation, Condensation, Precipitation, Collection.", "image_url": null }
+        ],
+        "render_key": "sci-water-cycle-u1-submission"
+      },
+
+      "quiz": {
+        "render_key": "sci-water-cycle-u1-quiz",
+        "questions": [
+          {
+            "question_index": 0,
+            "question": "What happens to water when the sun heats it up?",
+            "voice_text": "Here's your first question — think about what the sun does to a puddle after the rain. What happens to that water?",
+            "audio_location": "",
+            "options": [
+              { "label": "It freezes into ice", "value": "A" },
+              { "label": "It turns into water vapour and rises into the air", "value": "B" },
+              { "label": "It sinks into the ground forever", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "When the sun heats water, it evaporates — meaning it turns into invisible water vapour and floats up into the sky. That vapour later forms clouds!",
+            "explanation_voice_text": "Nice work if you got that! When the sun heats water, it evaporates — it turns into water vapour and drifts up into the sky. That's the very first step of the whole water cycle. Those vapour particles eventually become clouds!",
+            "audio_location_explanation": "",
+            "consolation": "Oops, not quite — but that's okay, water is sneaky!",
+            "consolation_voice_text": "Oops, not quite — but hey, water is sneaky! Let me give you a little nudge.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about what happens to a wet pavement on a hot sunny day — where does the water go?",
+            "hint_voice_text": "Here's a clue: picture a wet pavement on a really hot day. The water is there, then it's gone. Where did it go?",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 1,
+            "question": "What is it called when water vapour cools down and forms clouds?",
+            "voice_text": "Question two! You've watched water go up — now what happens when it gets cold up there in the sky?",
+            "audio_location": "",
+            "options": [
+              { "label": "Evaporation", "value": "A" },
+              { "label": "Precipitation", "value": "B" },
+              { "label": "Condensation", "value": "C" }
+            ],
+            "correct_option": "C",
+            "explanation": "When water vapour rises high and cools down, it condenses — it turns back into tiny water droplets that clump together to form clouds. This step is called condensation.",
+            "explanation_voice_text": "The answer is condensation! When water vapour cools way up high, it turns back into tiny droplets and those droplets group together to make clouds. So every cloud you see? That's just a bunch of cooled-down water vapour hanging out together.",
+            "audio_location_explanation": "",
+            "consolation": "Close, but not quite — the steps can get mixed up!",
+            "consolation_voice_text": "Close, but not quite! The steps sound similar, so let me help you sort them out.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Remember: evaporation is going UP, precipitation is coming DOWN — so what's the step in the middle when clouds form?",
+            "hint_voice_text": "Here's a hint: evaporation sends water up, precipitation brings it down. The middle step — when vapour becomes a cloud — that's the one you're looking for.",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 2,
+            "question": "Where does water eventually collect after it falls as rain?",
+            "voice_text": "Last question — rain has fallen from the sky. Where does it end up before the cycle begins all over again?",
+            "audio_location": "",
+            "options": [
+              { "label": "It disappears into space", "value": "A" },
+              { "label": "It collects in oceans, rivers, and lakes", "value": "B" },
+              { "label": "It floats in the air as clouds permanently", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "After rain falls, water collects in oceans, rivers, lakes, and soil. From there, the sun heats it again and the cycle starts all over — the same water, going round and round!",
+            "explanation_voice_text": "After rain falls, water gathers in oceans, rivers, and lakes. Then the sun heats it up again, it evaporates, and the whole cycle starts over. The water you drank today might have been in a dinosaur's puddle millions of years ago — how cool is that?",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — but think about where you see water on the ground!",
+            "consolation_voice_text": "Not quite — but think about this: after it rains, where do you see water gathering? Rivers? Puddles? Lakes?",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about what fills up when it rains a lot — rivers, lakes, and the big blue ocean.",
+            "hint_voice_text": "Think about what overflows when there's a lot of rain. Rivers, lakes, the ocean — water always finds a place to collect before it starts the journey all over again.",
+            "audio_location_hint": ""
+          }
+        ]
+      }
+    },
+
+    {
+      "unit_index": 1,
+      "unit_id": "sci-states-of-matter-u2",
+      "unit_name": "States of Matter",
+      "audio_location": "",
+
+      "video": {
+        "title": "Solid, Liquid, Gas — What's the Difference? 🧊💧💨",
+        "description": "Everything around you is made of matter — but why is ice hard, water wet, and steam invisible? Let's find out how the same stuff can look so completely different.",
+        "voice_text": "Quick — look around you right now. The chair you're on, the water in your bottle, the air you're breathing — all of it is matter. But they feel totally different, right? One is hard, one is wet, one you can't even see. Today we're going to find out why. And here's a spoiler: it all comes down to how fast tiny, tiny particles are moving.",
+        "youtube_url": "https://www.youtube.com/watch?v=BAtFncEphrM",
+        "points": 10,
+        "audio_location": "",
+        "render_key": "sci-states-of-matter-u2-video"
+      },
+
+      "submission": {
+        "prompt": "Find one solid, one liquid, and one gas in your home. Write their names and draw a small picture of each. Share a photo! 🧊💧💨",
+        "voice_text": "Time to become a matter detective! Look around your home and find one example of a solid, one liquid, and one gas. Write their names in your notebook, draw a tiny picture of each, and share a photo with us. They don't have to be fancy — your water bottle, a wooden spoon, and the air in a balloon totally count!",
+        "audio_location": "",
+        "points": 20,
+        "emoji_options": [
+          { "emoji": "🧪", "label": "Science is awesome!" },
+          { "emoji": "😐", "label": "It was okay" },
+          { "emoji": "😵", "label": "My brain hurts a little" }
+        ],
+        "reference_submissions": [
+          { "title": "Kavya's Matter Hunt", "description": "A notebook showing: Solid — pencil, Liquid — juice, Gas — air inside a balloon. Each with a neat drawing.", "image_url": null },
+          { "title": "Dev's Kitchen Examples", "description": "Solid: a spoon. Liquid: cooking oil. Gas: steam rising from a cup of tea. Simple and perfectly correct!", "image_url": null },
+          { "title": "Meera's Colourful Page", "description": "Three colourful boxes, one for each state, with the item name, a drawing, and one fun fact about each.", "image_url": null }
+        ],
+        "render_key": "sci-states-of-matter-u2-submission"
+      },
+
+      "quiz": {
+        "render_key": "sci-states-of-matter-u2-quiz",
+        "questions": [
+          {
+            "question_index": 0,
+            "question": "Which of these is an example of a solid?",
+            "voice_text": "First question — out of these three options, which one is a solid? Think about what you can hold firmly in your hand.",
+            "audio_location": "",
+            "options": [
+              { "label": "Milk", "value": "A" },
+              { "label": "A wooden block", "value": "B" },
+              { "label": "Steam", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "A wooden block is a solid — it has a fixed shape and volume. Milk is a liquid, and steam is a gas. Solids keep their shape unless something breaks or melts them.",
+            "explanation_voice_text": "A wooden block is the solid! Solids have a fixed shape — they don't flow or spread out on their own. Milk is a liquid that takes the shape of its container, and steam is a gas that spreads everywhere. The wooden block? It just stays exactly as it is.",
+            "audio_location_explanation": "",
+            "consolation": "Not this time — but you're thinking about it, which is great!",
+            "consolation_voice_text": "Not this time — but don't worry, you're thinking about it! Let me give you a little pointer.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "A solid has a fixed shape that doesn't change by itself. Which of those three things holds its shape?",
+            "hint_voice_text": "Here's your hint: a solid keeps its shape all on its own — you don't need to put it in a container. Which one on the list does that?",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 1,
+            "question": "What happens to particles in a gas compared to a solid?",
+            "voice_text": "Question two — this one is about what's happening inside the material, at a tiny level. What's different about gas particles versus solid particles?",
+            "audio_location": "",
+            "options": [
+              { "label": "Gas particles are packed tightly and barely move", "value": "A" },
+              { "label": "Gas particles move very fast and spread out in all directions", "value": "B" },
+              { "label": "Gas particles are heavier than solid particles", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "In a gas, particles move very fast and spread out to fill whatever space is available. In a solid, particles are tightly packed and only vibrate in place. That's why gases like air fill an entire room but a solid like a rock stays put.",
+            "explanation_voice_text": "Gas particles are speedsters — they zoom around in all directions and fill up whatever space they're in. Solid particles, on the other hand, are tightly packed and barely move. That's why air fills your whole room but your desk just sits there doing nothing.",
+            "audio_location_explanation": "",
+            "consolation": "Hmm, not quite — gases are actually the wild ones!",
+            "consolation_voice_text": "Hmm, not quite! Here's a clue: gases are the wild, free-roaming ones. Let me help you picture it.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about how perfume from one corner of a room can reach you across the room. The particles must be doing something pretty energetic!",
+            "hint_voice_text": "Think about perfume — someone sprays it in one corner and you can smell it on the other side of the room. That means those gas particles must be moving really, really fast in all directions!",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 2,
+            "question": "What state of matter takes the shape of its container but has a fixed volume?",
+            "voice_text": "Last one! Imagine you pour something from a round bowl into a tall glass. It changes shape — but the amount stays the same. What state is that?",
+            "audio_location": "",
+            "options": [
+              { "label": "Solid", "value": "A" },
+              { "label": "Liquid", "value": "B" },
+              { "label": "Gas", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "A liquid takes the shape of whatever container it's poured into, but the volume — the amount of liquid — stays the same. Pour water from a short wide cup into a tall thin glass and the shape changes, but you still have the same amount of water.",
+            "explanation_voice_text": "It's liquid! When you pour juice from one cup to another, it changes shape to match the container — but the amount of juice doesn't magically appear or disappear. That fixed volume with a flexible shape is exactly what makes something a liquid.",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — think about pouring water from one cup to another!",
+            "consolation_voice_text": "Not quite! Picture pouring water from a short wide cup into a tall thin glass. The water changes shape — but is there more or less of it? What does that tell you about what state it is?",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "A gas fills ANY space — it expands. A solid keeps its own shape. A liquid is in between — it flows but doesn't expand.",
+            "hint_voice_text": "Think of it this way: a gas fills the whole room, a solid keeps its own shape no matter what, and a liquid flows to fit its container but doesn't expand. Which one fits the question?",
+            "audio_location_hint": ""
+          }
+        ]
+      }
+    }
+
+  ]
+}

@@ -1,0 +1,240 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "course_id": "financial-verticals",
+    "course_display": "📈 Financial Verticals",
+    "description": "Two-unit financial literacy course covering budgeting and needs vs wants for young learners.",
+    "nextjs_notes": [
+      "Import as a static JSON or fetch from /api/courses/financial-verticals.",
+      "Index units by units[current_unit_index].",
+      "VideoPlayer props: { title, youtube_url, points, audio_location, voice_text }",
+      "SubmissionCard props: { prompt, voice_text, emoji_options[], reference_submissions[], audio_location }",
+      "QuizQuestion props: { question, voice_text, options[], correct_option, audio_location }",
+      "QuizFeedback props (shown on wrong answer): { consolation, consolation_voice_text, audio_location_consolation, audio_location_cheer_up, hint, hint_voice_text, audio_location_hint, explanation, explanation_voice_text, audio_location_explanation }",
+      "voice_text fields are the spoken-aloud script for their sibling text field, written naturally for TTS.",
+      "audio_location_cheer_up is a short distinct pep-talk clip played after the consolation voice line and before the hint is revealed.",
+      "After a quiz finishes, post { unit_id, q1_correct, q2_correct, q3_correct } to /api/progress.",
+      "After a submission, post { unit_id, emoji_chosen } to /api/submissions."
+    ]
+  },
+
+  "course_id": "financial-verticals",
+  "course_display": "📈 Financial Verticals",
+  "units": [
+
+    {
+      "unit_index": 0,
+      "unit_id": "fin-budget-smart-u1",
+      "unit_name": "Budget Smart — Money Gets a Plan",
+      "audio_location": "",
+
+      "video": {
+        "title": "Can Ravi Save ₹50? 💰",
+        "description": "Follow Ravi as he figures out where his pocket money is going — and makes a smart plan to save more. You'll build your own budget by the end!",
+        "voice_text": "Quick — has this ever happened to you? You get money, you're excited, you spend it on snacks and fun stuff — and then you need something actually important and there's nothing left? Yep, that's happened to pretty much everyone. But there's a way out, and it's called budgeting. It sounds fancy but it's really just making a plan for your money before you spend it. Ravi's about to show us how — let's see if he can pull it off.",
+        "youtube_url": "https://www.youtube.com/watch?v=3z_7ckQYScQ",
+        "points": 10,
+        "audio_location": "",
+        "render_key": "fin-budget-smart-u1-video"
+      },
+
+      "submission": {
+        "prompt": "Build your own weekly budget! Imagine your income is ₹500 and your savings goal is ₹150. List your needs and wants and fill in the budget table. Click a photo and share it! 💰",
+        "voice_text": "Alright, now it's your turn to be the budget boss! Imagine you have ₹500 for the week and you want to save ₹150. First, decide your savings goal and set that aside. Then figure out what you need — school stuff, transport — and what you want — snacks, fun things. Make a table in your notebook: Income, Savings, Needs, Wants. Fill it in and make sure the numbers actually add up. Then snap a photo and show us your money plan!",
+        "audio_location": "",
+        "points": 20,
+        "emoji_options": [
+          { "emoji": "💰", "label": "I'm a budget boss!" },
+          { "emoji": "🤔", "label": "Made me think hard" },
+          { "emoji": "😬", "label": "Numbers are tricky" }
+        ],
+        "reference_submissions": [
+          { "title": "Riya's Budget Table", "description": "A neat table with Income ₹500, Savings ₹150, Needs ₹220 (notebook, bus fare), Wants ₹130 (snacks, stickers). Total checks out perfectly.", "image_url": null },
+          { "title": "Kiran's Colour-Coded Budget", "description": "Needs highlighted in green, Wants in yellow, Savings in blue. Clear, organised, and maths is correct.", "image_url": null },
+          { "title": "Sahil's Detailed Plan", "description": "Each item listed with its cost, then grouped into Needs and Wants, with a final Savings row showing ₹150 remaining. Great detail!", "image_url": null }
+        ],
+        "render_key": "fin-budget-smart-u1-submission"
+      },
+
+      "quiz": {
+        "render_key": "fin-budget-smart-u1-quiz",
+        "questions": [
+          {
+            "question_index": 0,
+            "question": "What is a budget?",
+            "voice_text": "First question — in your own words after watching the video, what is a budget?",
+            "audio_location": "",
+            "options": [
+              { "label": "A list of games you like", "value": "A" },
+              { "label": "A plan for using money wisely", "value": "B" },
+              { "label": "A box to keep your money in", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "A budget is a plan — it helps you decide in advance where your money will go. With a budget, you make sure the important things get paid for first, and you don't run out of money at the wrong moment.",
+            "explanation_voice_text": "A budget is a plan for using your money wisely. It's how you decide in advance — before you've spent anything — where each rupee goes. That way, when you need money for something important, you actually have it. A box or a games list can't do that for you!",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — think about what Ravi made in the video!",
+            "consolation_voice_text": "Not quite — go back to what Ravi made in the video. He sat down with a table and figured out his money. What was that called?",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about what the word 'plan' has to do with money — a budget helps you plan where your money will go.",
+            "hint_voice_text": "Here's your clue: a budget is all about planning. Before you spend, you decide where your money goes. Which option sounds like a plan?",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 1,
+            "question": "Which of these is a Need?",
+            "voice_text": "Question two — this one is about spotting the difference. Out of these three, which one is a Need?",
+            "audio_location": "",
+            "options": [
+              { "label": "A notebook for school", "value": "A" },
+              { "label": "Ice cream", "value": "B" },
+              { "label": "A movie ticket", "value": "C" }
+            ],
+            "correct_option": "A",
+            "explanation": "A notebook for school is a Need — you genuinely require it to study and learn. Ice cream and movie tickets are Wants — enjoyable, but you can live and do well without them.",
+            "explanation_voice_text": "A school notebook is a Need! You need it to study, take notes, and do your work. Ice cream is delicious, and movies are fun — but if you didn't have them, your life would continue just fine. That's the difference between a Need and a Want.",
+            "audio_location_explanation": "",
+            "consolation": "Hmm, not quite — ask yourself: could you survive school without it?",
+            "consolation_voice_text": "Hmm, not quite! Here's the test: could you get through your school day without it? If yes, it's probably a Want. If no, it might be a Need.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "A Need is something essential — something you genuinely can't do without. Which of these three do you actually need for school?",
+            "hint_voice_text": "Here's your hint: a Need is something you can't really do without — especially for school or daily life. Which one of those options would cause a real problem if you didn't have it?",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 2,
+            "question": "Your income is ₹200 and you want to save ₹50. How much can you spend?",
+            "voice_text": "Last question — a little maths! Your income is two hundred rupees and your savings goal is fifty. What's left for spending?",
+            "audio_location": "",
+            "options": [
+              { "label": "₹250", "value": "A" },
+              { "label": "₹150", "value": "B" },
+              { "label": "₹50", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "₹200 income minus ₹50 savings = ₹150 to spend. Simple but powerful — once you take out your savings first, you know exactly how much is available for everything else.",
+            "explanation_voice_text": "Two hundred minus fifty equals one hundred and fifty. So you have ₹150 to spend on your needs and wants. The key habit here is saving first — pull out your ₹50 right away so you're never tempted to spend it, and then use the remaining ₹150 wisely.",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — try the maths: income minus savings!",
+            "consolation_voice_text": "Not quite! Just do the subtraction: take your savings goal away from your total income. What's left is what you can spend.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Spend = Income minus Savings. So ₹200 minus ₹50 equals...?",
+            "hint_voice_text": "Here's the formula: what you can spend equals your income minus your savings goal. So take two hundred and subtract fifty — what do you get?",
+            "audio_location_hint": ""
+          }
+        ]
+      }
+    },
+
+    {
+      "unit_index": 1,
+      "unit_id": "fin-needs-wants-u2",
+      "unit_name": "Needs vs Wants — Smart Choices Start Here",
+      "audio_location": "",
+
+      "video": {
+        "title": "Can Needs Beat Your Wants? 🛒",
+        "description": "Meet the Gupta family and find out how understanding Needs and Wants can help them — and you — save more and stress less.",
+        "voice_text": "Imagine you're locked in a room with two doors. Behind one door: food and water. Behind the other: pizza and cold drink. You can only open one. Which do you pick? I think we both know the answer — but here's the interesting question: why? Today we're going to meet the Gupta family, and they're going to help us understand exactly what separates a Need from a Want — and how knowing that difference can change the way you use money forever.",
+        "youtube_url": "https://www.youtube.com/watch?v=EpW1pyS8JIg",
+        "points": 10,
+        "audio_location": "",
+        "render_key": "fin-needs-wants-u2-video"
+      },
+
+      "submission": {
+        "prompt": "Create a Needs vs Wants table in your notebook! Write at least 3 Needs and 3 Wants from your own life. Draw a small icon next to each one. Share a photo! 🛒",
+        "voice_text": "Time to be a money detective — about your own life! Make a two-column table in your notebook: Needs on the left, Wants on the right. Think about your own week and fill in at least three things in each column. Then draw a tiny icon next to each one — a pencil, a snack, whatever it is. When you're done, take a photo and share it. I want to see the real stuff from your real life!",
+        "audio_location": "",
+        "points": 20,
+        "emoji_options": [
+          { "emoji": "⭐", "label": "Feeling confident!" },
+          { "emoji": "🤔", "label": "I had to think about some" },
+          { "emoji": "👎", "label": "Still a bit confused" }
+        ],
+        "reference_submissions": [
+          { "title": "Aanya's Table", "description": "Needs: school bag, lunch, uniform. Wants: stickers, video game, toy. Each with a cute hand-drawn icon. Perfect!", "image_url": null },
+          { "title": "Rohan's Detailed List", "description": "Five Needs and five Wants, with a short reason written next to each one explaining why it's a Need or Want. Extra effort, great thinking.", "image_url": null },
+          { "title": "Preet's Colourful Chart", "description": "A bright two-column table with green for Needs and orange for Wants. Icons are clear and the sorting is accurate.", "image_url": null }
+        ],
+        "render_key": "fin-needs-wants-u2-submission"
+      },
+
+      "quiz": {
+        "render_key": "fin-needs-wants-u2-quiz",
+        "questions": [
+          {
+            "question_index": 0,
+            "question": "What does 'Income' mean?",
+            "voice_text": "First question — this is a vocabulary one. What does the word income actually mean?",
+            "audio_location": "",
+            "options": [
+              { "label": "Money paid to buy something", "value": "A" },
+              { "label": "Money people earn by working", "value": "B" },
+              { "label": "Money borrowed from friends", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "Income is the money you earn — from a job, from pocket money given as a reward, or from any work you do. It's what comes IN to your hands before you start spending.",
+            "explanation_voice_text": "Income is the money that comes in — money you earn by working, or pocket money you receive as a reward. It's not money you borrow or money you spend. Think of it as your starting point before you make any decisions about where the money goes.",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — income is what comes IN to you, not what goes out!",
+            "consolation_voice_text": "Not quite — here's a tip: the word 'income' has the word 'in' right at the start. It's money that comes IN to you. What kind of money comes in?",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about Mr. Gupta and Mrs. Gupta from the video — they both went to work. The money they received for their work is their income.",
+            "hint_voice_text": "Think about the Gupta family. Mr. Gupta teaches, Mrs. Gupta stitches clothes. The money they get in return for doing that work — that's their income. Which option matches that?",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 1,
+            "question": "You have ₹50. Medicine costs ₹40 and chips cost ₹20. What should you buy first?",
+            "voice_text": "Question two — you've got fifty rupees, not quite enough for both. You have to choose. What do you do?",
+            "audio_location": "",
+            "options": [
+              { "label": "Medicine first", "value": "A" },
+              { "label": "Chips first", "value": "B" },
+              { "label": "Nothing — just save it all", "value": "C" }
+            ],
+            "correct_option": "A",
+            "explanation": "Medicine is a Need — your health comes first. Chips are a Want — enjoyable but not essential. When money is limited, Needs always take priority over Wants. You can skip chips; you can't skip medicine.",
+            "explanation_voice_text": "Medicine first, every time. Your health is a Need — not having medicine when you're sick is a real problem. Chips are a Want — they're tasty but you won't be harmed without them. When money is tight, Needs win. That's the rule, and it's a good one.",
+            "audio_location_explanation": "",
+            "consolation": "Think about what actually matters more here — your health or a snack!",
+            "consolation_voice_text": "Take a moment and think: one of those things is important for your health, and one is just nice to have. Which one actually matters if you're not feeling well?",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Ask yourself: which of these two things would cause a real problem if you didn't have it?",
+            "hint_voice_text": "Here's the question to ask: what happens if you don't get each one? If you don't get chips, you're just a bit disappointed. If you don't get medicine when you're sick — that's a real problem. Which should come first?",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 2,
+            "question": "Which of these is responsible money behaviour?",
+            "voice_text": "Last question — which of these shows someone who really understands money?",
+            "audio_location": "",
+            "options": [
+              { "label": "Spending most of your money on video games and movies", "value": "A" },
+              { "label": "Buying expensive things just to look cool", "value": "B" },
+              { "label": "Thinking about your Needs before spending on Wants", "value": "C" }
+            ],
+            "correct_option": "C",
+            "explanation": "Thinking about Needs before Wants is the responsible choice. It doesn't mean never enjoying Wants — it just means being intentional. Plan first, spend second. That's how you avoid running out of money when it matters most.",
+            "explanation_voice_text": "Thinking about your Needs before spending on Wants is the smart move. It doesn't mean you can never enjoy things — it just means you plan first. Needs covered? Great. Money left over? Now you can enjoy your Wants without worry. That's what responsible money behaviour looks like.",
+            "audio_location_explanation": "",
+            "consolation": "Think about what would actually serve you best in the long run!",
+            "consolation_voice_text": "Think about which of those choices you'd thank yourself for a week later. Which one keeps you from being stuck without money when something important comes up?",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Responsible money behaviour is about planning and prioritising — making sure the important things are covered before the fun things.",
+            "hint_voice_text": "Here's your clue: responsible money behaviour means thinking ahead. You want to make sure the important things are always covered, and then enjoy the fun things with what's left. Which option shows that?",
+            "audio_location_hint": ""
+          }
+        ]
+      }
+    }
+
+  ]
+}

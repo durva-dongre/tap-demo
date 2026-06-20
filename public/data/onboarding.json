@@ -1,0 +1,297 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "flow_id": "onboarding_v1",
+    "type": "onboarding_flow",
+    "description": "Runs once per student on first install. Collects course choice, confirms identity details, asks sibling status, fills school/class/subject, then hands off to daily_activity flow.",
+    "nextjs_notes": [
+      "Render one step per chat bubble in sequence, keyed by step_id.",
+      "display_text is what renders in the chat bubble. voice_text is the script for audio playback — it is written to sound natural when spoken, so play audio_location alongside display_text, never derive one from the other.",
+      "Maintain a step history array. On back_step, pop the stack and re-render that step; do not re-trigger side effects (points, caching) twice.",
+      "input_mode values: static (no input, auto-advance on tap-to-continue or timer), buttons_only (render options[] as pill buttons, disable free text), radio (render options[] as radio group), free_text (render a text input), form (render form_fields[] as one inline card).",
+      "cache_fields lists which keys to write to student cache the moment they are collected or confirmed. Cached values should pre-fill any future step that reads them.",
+      "fallback_guide fires only when input_mode is buttons_only, radio, or form and the student sends free text instead of using the control. It re-shows the same step's controls, it does not advance.",
+      "Resolve every {{placeholder}} in display_text from cache before rendering. voice_text fields are pre-written to avoid placeholders entirely — use them as-is.",
+      "variants object: pick the single variant matching cache.selected_course and render only that one.",
+      "[confetti] in display_text is a render hint, trigger your confetti component, then strip the tag before showing text.",
+      "[Xpts] or [+Xpts] in display_text is a render hint for an animated point-badge component, strip tag before showing text, and increment the points balance in state by the points_awarded value.",
+      "sub_display and form_fields blocks render as cards directly beneath the bubble, not as separate messages.",
+      "On flow completion (last step's next_step is null and it links onward), hand off to daily_activity.json starting at its first step_id."
+    ]
+  },
+
+  "steps": [
+
+    {
+      "step_id": "OB-01",
+      "index": 1,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Hi champ 👋 Thanks for installing the TAP APP — you're already one step ahead. Let's get you set up!",
+      "voice_text": "Hi champ! Thanks so much for installing the TAP app — honestly, just showing up already puts you one step ahead. Let's get you set up!",
+      "next_step": "OB-02",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "OB-02",
+      "index": 2,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "display_text": "Which course do you want to enroll in? Pick one below 👇",
+      "voice_text": "So, which course are you thinking of joining? Take a look below and pick whichever one feels right.",
+      "options": [
+        { "label": "🔬 Science", "value": "science", "next_step": "OB-03" },
+        { "label": "💻 Coding", "value": "coding", "next_step": "OB-03" },
+        { "label": "📈 Financial Verticals", "value": "financial-verticals", "next_step": "OB-03" },
+        { "label": "🎨 Visual Arts", "value": "visual-arts", "next_step": "OB-03" }
+      ],
+      "cache_fields": ["selected_course"],
+      "back_step": "OB-01",
+      "fallback_guide": "Hey, just tap one of the four course buttons above — that's all you need to do! 😊"
+    },
+
+    {
+      "step_id": "OB-03",
+      "index": 3,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "note": "Render the single variant matching cache.selected_course. {{name}} resolves from cache for display_text only.",
+      "variants": {
+        "science": {
+          "display_text": "Ayyyy Science?! That's amazing, {{name}} — future scientist right here 🔬 Are you sure you want to lock in Science? Just so you know, your course can't be changed once you confirm.",
+          "voice_text": "Ooooh, Science? That's amazing — I can already picture you as a future scientist! Just double checking though, once you lock this in, it's staying locked. So, are you sure about Science?"
+        },
+        "coding": {
+          "display_text": "Ayyyy Coding?! Love that energy, {{name}} — future developer incoming 💻 Are you sure you want to lock in Coding? Just so you know, your course can't be changed once you confirm.",
+          "voice_text": "Coding, nice! I love that energy, future developer right here. Quick heads up though — once you confirm this, there's no switching later. So, are you sure you want to go with Coding?"
+        },
+        "financial-verticals": {
+          "display_text": "Ayyyy Financial Verticals?! Smart move, {{name}} — money mindset activated 📈 Are you sure you want to lock in Financial Verticals? Just so you know, your course can't be changed once you confirm.",
+          "voice_text": "Financial Verticals, smart choice! Money mindset officially activated. Just so you know, once you confirm this one it's permanent — so are you sure you want to go ahead?"
+        },
+        "visual-arts": {
+          "display_text": "Ayyyy Visual Arts?! So cool, {{name}} — creative genius detected 🎨 Are you sure you want to lock in Visual Arts? Just so you know, your course can't be changed once you confirm.",
+          "voice_text": "Visual Arts, so cool — creative genius detected right away! One quick thing though, once this is confirmed it can't be changed later. So, are you sure you want to lock it in?"
+        }
+      },
+      "options": [
+        { "label": "✅ Yes, I'm sure!", "value": "confirm", "next_step": "OB-04" },
+        { "label": "🔄 Let me re-pick", "value": "repick", "next_step": "OB-02" }
+      ],
+      "back_step": "OB-02",
+      "fallback_guide": "Tap '✅ Yes, I'm sure!' to confirm your course or '🔄 Let me re-pick' to go back — it's that simple!"
+    },
+
+    {
+      "step_id": "OB-04",
+      "index": 4,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "[confetti] Woohoo {{name}}! You're officially enrolled in {{course_display}} 🎉 Let's make it count.",
+      "voice_text": "Woohoo! You're officially enrolled — let's make it count!",
+      "note": "[confetti] triggers confetti animation, strip before rendering text. course_display resolves from cache.selected_course.",
+      "next_step": "OB-05",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "OB-05",
+      "index": 5,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "display_text": "Now let's check your details ✅",
+      "voice_text": "Alright, now let's just double check your details.",
+      "sub_display": {
+        "note": "Render as a read-only info card directly beneath the bubble.",
+        "fields": [
+          { "key": "name", "label": "Name", "source": "cache.name", "editable": true },
+          { "key": "phone", "label": "Phone Number", "source": "cache.phone", "editable": true },
+          { "key": "language", "label": "Language", "source": "cache.language", "editable": true, "options": ["English", "Hindi", "Marathi", "Punjabi", "Kannada"] }
+        ]
+      },
+      "cache_fields": ["name", "phone", "language"],
+      "options": [
+        { "label": "✏️ Edit details", "value": "edit", "next_step": "OB-05-EDIT" },
+        { "label": "Looks good 👍", "value": "confirm", "next_step": "OB-06" }
+      ],
+      "back_step": "OB-04",
+      "fallback_guide": "Tap 'Looks good 👍' if everything is correct, or '✏️ Edit details' to make changes."
+    },
+
+    {
+      "step_id": "OB-05-EDIT",
+      "index": "5a",
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "display_text": "No worries! Which detail would you like to change?",
+      "voice_text": "No worries at all, happens to everyone. Which detail would you like to change?",
+      "options": [
+        { "label": "Name", "value": "edit_name", "next_step": "OB-05-EDIT-NAME" },
+        { "label": "Phone", "value": "edit_phone", "next_step": "OB-05-EDIT-PHONE" },
+        { "label": "Language", "value": "edit_language", "next_step": "OB-05-EDIT-LANG" }
+      ],
+      "back_step": "OB-05",
+      "fallback_guide": "Pick one of the fields above to edit it."
+    },
+
+    {
+      "step_id": "OB-05-EDIT-NAME",
+      "index": "5b",
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "free_text",
+      "audio_location": "",
+      "display_text": "What should I call you? Just type your name below 😊",
+      "voice_text": "What should I call you? Go ahead and type your name below.",
+      "cache_fields": ["name"],
+      "next_step": "OB-05",
+      "back_step": "OB-05-EDIT",
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "OB-05-EDIT-PHONE",
+      "index": "5c",
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "free_text",
+      "audio_location": "",
+      "display_text": "What's your phone number?",
+      "voice_text": "What's your phone number?",
+      "validation": "phone",
+      "cache_fields": ["phone"],
+      "next_step": "OB-05",
+      "back_step": "OB-05-EDIT",
+      "fallback_guide": "Please enter a valid phone number."
+    },
+
+    {
+      "step_id": "OB-05-EDIT-LANG",
+      "index": "5d",
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "display_text": "Pick your preferred language 🌐",
+      "voice_text": "Pick your preferred language from the options below.",
+      "options": [
+        { "label": "English", "value": "English", "next_step": "OB-05" },
+        { "label": "Hindi", "value": "Hindi", "next_step": "OB-05" },
+        { "label": "Marathi", "value": "Marathi", "next_step": "OB-05" },
+        { "label": "Punjabi", "value": "Punjabi", "next_step": "OB-05" },
+        { "label": "Kannada", "value": "Kannada", "next_step": "OB-05" }
+      ],
+      "cache_fields": ["language"],
+      "back_step": "OB-05-EDIT",
+      "fallback_guide": "Tap your preferred language from the buttons above."
+    },
+
+    {
+      "step_id": "OB-06",
+      "index": 6,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "radio",
+      "audio_location": "",
+      "display_text": "Do you have a sibling? 👫",
+      "voice_text": "Quick question — do you have a sibling?",
+      "options": [
+        { "label": "Yes", "value": "yes", "next_step": "OB-07" },
+        { "label": "No", "value": "no", "next_step": "OB-07" }
+      ],
+      "cache_fields": ["has_sibling"],
+      "back_step": "OB-05",
+      "fallback_guide": "Tap Yes or No — just one tap!"
+    },
+
+    {
+      "step_id": "OB-07",
+      "index": 7,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "form",
+      "audio_location": "",
+      "display_text": "A few more quick ones — fill these in and we're almost done! 🚀",
+      "voice_text": "Just a few more quick details and then we're all done here.",
+      "form_fields": [
+        {
+          "key": "school",
+          "label": "School",
+          "placeholder": "e.g. Delhi Public School",
+          "input_mode": "free_text",
+          "cache_field": "school",
+          "pre_fill_from_cache": true
+        },
+        {
+          "key": "class",
+          "label": "Class / Grade",
+          "placeholder": "e.g. Grade 8",
+          "input_mode": "free_text",
+          "cache_field": "class",
+          "pre_fill_from_cache": true
+        },
+        {
+          "key": "subject",
+          "label": "Favourite Subject",
+          "placeholder": "e.g. Mathematics",
+          "input_mode": "free_text",
+          "cache_field": "subject",
+          "pre_fill_from_cache": true
+        }
+      ],
+      "note": "Render as one inline form card. Pre-fill any field already in cache. On submit, cache all three fields then advance.",
+      "cache_fields": ["school", "class", "subject"],
+      "next_step": "OB-08",
+      "back_step": "OB-06",
+      "fallback_guide": "Fill in your School, Class, and Favourite Subject in the form above and hit submit!"
+    },
+
+    {
+      "step_id": "OB-08",
+      "index": 8,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Congrats {{name}} 🎉 You just earned [500pts] for completing your profile! You're crushing it already.",
+      "voice_text": "Congratulations! You just earned five hundred points for completing your profile. You're crushing it already!",
+      "note": "[500pts] is a render hint for the animated point-badge component, strip before rendering text.",
+      "points_awarded": 500,
+      "next_step": "OB-09",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "OB-09",
+      "index": 9,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "display_text": "You can check your points anytime on the Passport tab 🛂✨ Now — are you ready to start learning?",
+      "voice_text": "By the way, you can check your points anytime on the Passport tab. Now then — are you ready to start learning?",
+      "options": [
+        { "label": "🚀 Start Learning", "value": "start_learning", "next_step": "DAILY_ACTIVITY_START" }
+      ],
+      "back_step": null,
+      "fallback_guide": "Tap 'Start Learning' and let's go! 💪"
+    }
+
+  ]
+}

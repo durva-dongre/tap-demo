@@ -1,0 +1,240 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "course_id": "visual-arts",
+    "course_display": "Visual Arts",
+    "description": "Visual Arts course content. Basic Art Skills - Arts - Level 1. Two units: a Basic 'Pen Holder' lesson and a Remedial 'Pen Stand' lesson, both teaching recycling-based craft skills.",
+    "nextjs_notes": [
+      "Import as a static JSON or fetch from /api/courses/{course_id}.",
+      "Index units by units[current_unit_index].",
+      "VideoPlayer props: { title, youtube_url, points, audio_location, voice_text }",
+      "SubmissionCard props: { prompt, voice_text, emoji_options[], reference_submissions[], audio_location }",
+      "QuizQuestion props: { question, voice_text, options[], correct_option, audio_location }",
+      "QuizFeedback props (shown on wrong answer): { consolation, consolation_voice_text, audio_location_consolation, audio_location_cheer_up, hint, hint_voice_text, audio_location_hint, explanation, explanation_voice_text, audio_location_explanation }",
+      "voice_text fields are the spoken-aloud script for their sibling text field, written naturally for TTS, keep them free of any literal placeholder syntax.",
+      "audio_location_cheer_up is a short distinct pep-talk clip played after the consolation voice line and before the hint is revealed on a wrong answer.",
+      "After a quiz finishes, post { unit_id, q1_correct, q2_correct, q3_correct } to /api/progress.",
+      "After a submission, post { unit_id, emoji_chosen } to /api/submissions."
+    ]
+  },
+
+  "course_id": "visual-arts",
+  "course_display": "Visual Arts",
+  "units": [
+
+    {
+      "unit_index": 0,
+      "unit_id": "VAL1CB01",
+      "unit_name": "Pen Holder",
+      "audio_location": "",
+
+      "video": {
+        "title": "Waste Becomes a Holder ♻️",
+        "description": "In this activity, students will make a pen holder using waste materials! They will use empty boxes, bottles, and leftover paper to create something useful. This activity will help students be creative and learn how to care for the environment. They will decorate their pen holder in their own way and make it unique!",
+        "voice_text": "Quick question before we start — where do your pens usually end up? Rolling off the table, lost in a bag, hiding under a pile of books? Yeah, same here. So today we're fixing that, and we're doing it without spending a single rupee. All you need is something you were probably about to throw away — an old box, a used bottle, some scrap paper, a pair of scissors, and a bit of glue. I've got an empty box that came with my glasses, and some leftover craft paper sitting in my drawer. First thing — take your pen and lightly mark where you want to cut, just enough so it'll hold your pens comfortably. Now grab those scissors and cut along that line, nice and steady. Once that's done, it's makeover time — I'm wrapping mine in yellow paper, smoothing it down so it looks neat. And since I went with yellow, I had an idea... why not turn this into a little bumblebee? A couple of white paper eyes, two pink wings, and suddenly my pen holder has personality. This is the fun part — your turn now. Look around you, grab whatever scraps you've got, and build something that's completely yours. Stripes, a face, a pattern, anything. When you're done, snap a photo and share it with Tap Buddy so we can all see what you made. And hey — one thing worth remembering, every time we reuse something instead of tossing it, we're doing our little bit for the planet. Don't forget the quiz waiting for you at the end. Have fun creating!",
+        "youtube_url": "https://youtu.be/536z1WXxcPU",
+        "points": 1,
+        "audio_location": "",
+        "render_key": "video_VAL1CB01"
+      },
+
+      "submission": {
+        "prompt": "Make a Waste Material Pen Holder ♻️",
+        "voice_text": "Alright, your turn to shine! Take that waste box or bottle you found, cover it up, decorate it your way, and turn it into a pen holder you'd actually want sitting on your desk. Once it's ready, take a clear photo of it and send it over — we can't wait to see what you've created.",
+        "audio_location": "",
+        "points": 1,
+        "emoji_options": [
+          { "emoji": "👍", "label": "Loved making it" },
+          { "emoji": "🎨", "label": "Got creative with it" },
+          { "emoji": "👎", "label": "Wasn't really my thing" }
+        ],
+        "reference_submissions": [
+          { "title": "Bumblebee Pen Holder", "description": "A waste box covered in yellow paper with white paper eyes and pink paper wings, turning a simple holder into a cheerful bumblebee character.", "image_url": null },
+          { "title": "Striped Holder", "description": "A pen holder wrapped neatly in alternating colored paper strips for a clean, patterned look.", "image_url": null },
+          { "title": "Plain Color Holder", "description": "A simply finished pen holder covered in a single solid color with smooth, tidy edges.", "image_url": null }
+        ],
+        "render_key": "submission_VAL1CB01"
+      },
+
+      "quiz": {
+        "render_key": "quiz_VAL1CB01",
+        "questions": [
+          {
+            "question_index": 0,
+            "question": "What is the main material suggested for creating a pen holder in the activity?",
+            "voice_text": "Let's start easy — when we made our pen holder in the video, what did we actually build it out of?",
+            "audio_location": "",
+            "options": [
+              { "label": "Cardboard tubes", "value": "A" },
+              { "label": "Waste or empty bottles and boxes", "value": "B" },
+              { "label": "Newspaper", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "We built our pen holder using waste or empty bottles and boxes — turning something we'd normally throw away into something useful.",
+            "explanation_voice_text": "Exactly right — we used waste or empty bottles and boxes. That's the whole idea behind this activity, giving trash a second life!",
+            "audio_location_explanation": "",
+            "consolation": "Not quite, but you're close — think back to what was sitting on the table at the start of the video.",
+            "consolation_voice_text": "Almost there! Think back to what was sitting on the table right at the start of the video.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "It's something you'd normally throw in the dustbin.",
+            "hint_voice_text": "Here's a hint — it's something you'd usually just toss in the dustbin without a second thought.",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 1,
+            "question": "Why is reusing waste materials important, according to the video?",
+            "voice_text": "Here's one to think about — why did we make such a big deal about reusing waste instead of just buying a new pen holder?",
+            "audio_location": "",
+            "options": [
+              { "label": "It reduces the cost of new products", "value": "A" },
+              { "label": "It enhances creativity", "value": "B" },
+              { "label": "It helps protect our Earth", "value": "C" }
+            ],
+            "correct_option": "C",
+            "explanation": "Reusing waste materials helps protect our Earth — every item we reuse is one less thing polluting the planet.",
+            "explanation_voice_text": "That's it — reusing helps protect our Earth. Every box or bottle we reuse is one less thing adding to the pollution pile.",
+            "audio_location_explanation": "",
+            "consolation": "Good guess, but the video's real message goes a bit deeper than that.",
+            "consolation_voice_text": "Good guess, but the video was actually pointing at something bigger than that.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Remember the bit about 2 billion tons of waste we create every year?",
+            "hint_voice_text": "Remember that number we mentioned — 2 billion tons of waste created every single year? That's your clue.",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 2,
+            "question": "What is the first step in transforming a waste box into a pen holder?",
+            "voice_text": "Quick recall — before any cutting or decorating happened, what was the very first thing we did to the box?",
+            "audio_location": "",
+            "options": [
+              { "label": "Marking where to cut with a pen", "value": "A" },
+              { "label": "Covering the box with paper", "value": "B" },
+              { "label": "Gluing the paper to the box", "value": "C" }
+            ],
+            "correct_option": "A",
+            "explanation": "The first step was marking where to cut with a pen, so the height would be just right before reaching for the scissors.",
+            "explanation_voice_text": "Right on — we marked the cutting line with a pen first. Getting that height marked out before cutting saves you from a wobbly mistake!",
+            "audio_location_explanation": "",
+            "consolation": "Not the first step — that one actually comes a little later, once the shape is ready.",
+            "consolation_voice_text": "Not quite the first step — that one comes a bit later, once the shape of the box is already sorted.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about what you'd need before you even pick up the scissors.",
+            "hint_voice_text": "Think about it this way — what would you need to do before you even pick up the scissors?",
+            "audio_location_hint": ""
+          }
+        ]
+      }
+    },
+
+    {
+      "unit_index": 1,
+      "unit_id": "VAL1RB06",
+      "unit_name": "Pen Stand",
+      "audio_location": "",
+
+      "video": {
+        "title": "Box Becomes a Stand 📦",
+        "description": "In this activity, students will make a pen holder using waste materials. They will use boxes, bottles, and paper. This will help them be creative and care for the environment. They will decorate their pen holder in their own way.",
+        "voice_text": "Be honest — do your pens keep disappearing on you? One day they're in your bag, the next they're somewhere under the table, and you have no idea how they got there. Let's fix that today, step by step, and we're going to do it with stuff you'd otherwise throw away. Here's what you'll need — an empty box, a bit of waste paper, scissors, and some glue. You don't need a perfectly shaped box either, if it's a little wonky, just tape it up like I did. Now grab a pen and lightly mark where you want to cut, so the height ends up just right for holding your pens. Go ahead, cut along that line with your scissors, nice and slow, there's no rush here. If you want, pause the video right now and get your box cut and ready — and don't be shy about asking someone bigger to help if you need it. Once that's sorted, place your paper underneath the box and measure it out so it wraps around with just a little extra on both sides to fold over neatly. I'm using two smaller pieces of paper here since that's what I had, but one big sheet works just as well. And don't worry if the glue leaves a little mark here or there — sometimes that turns into part of the design! Now comes the fun bit. You can keep it simple with just one color, or go bold with stripes, dots, or mix in some patterned paper. Feeling extra creative? Add some shapes, a face, maybe even turn it into a character. Once your decoration is done, that's it — your pen stand is ready, and your pens finally have a home. Go ahead, decide your design, and bring your pen stand to life. When it's done, take a clear photo and share it on Tap Buddy. And of course, the quiz is waiting for you at the end. Thanks for creating with me today!",
+        "youtube_url": "https://youtu.be/c85HQBXDEzs",
+        "points": 1,
+        "audio_location": "",
+        "render_key": "video_VAL1RB06"
+      },
+
+      "submission": {
+        "prompt": "Make a Box Pen Stand 📦",
+        "voice_text": "Now it's your turn to build one of these yourself. Grab a box, wrap it up neatly in paper, and decorate it however feels right to you — plain, patterned, or with a character of its own. Once your pen stand is ready, take a clear photo or short video and send it our way.",
+        "audio_location": "",
+        "points": 1,
+        "emoji_options": [
+          { "emoji": "👍", "label": "Loved making it" },
+          { "emoji": "🎨", "label": "Got creative with it" },
+          { "emoji": "👎", "label": "Wasn't really my thing" }
+        ],
+        "reference_submissions": [
+          { "title": "Simple One-Color Stand", "description": "A box neatly wrapped in a single color of paper with clean, tidy edges and a sturdy finish.", "image_url": null },
+          { "title": "Striped Pattern Stand", "description": "A pen stand decorated with colorful paper strips arranged in stripes for a playful, patterned look.", "image_url": null },
+          { "title": "Character Pen Stand", "description": "A pen stand with added paper shapes forming a simple face or character on the front.", "image_url": null }
+        ],
+        "render_key": "submission_VAL1RB06"
+      },
+
+      "quiz": {
+        "render_key": "quiz_VAL1RB06",
+        "questions": [
+          {
+            "question_index": 0,
+            "question": "What materials are needed to create the pen holder?",
+            "voice_text": "Let's warm up — what exactly did we gather before starting on our pen stand?",
+            "audio_location": "",
+            "options": [
+              { "label": "An empty box, waste paper, scissors, and glue", "value": "A" },
+              { "label": "A plastic bottle, colored paper, scissors, and tape", "value": "B" },
+              { "label": "A cardboard tube, wrapping paper, glue, and string", "value": "C" }
+            ],
+            "correct_option": "A",
+            "explanation": "We used an empty box, some waste paper, scissors, and glue — simple things you'll find lying around at home.",
+            "explanation_voice_text": "Spot on — an empty box, some waste paper, scissors, and glue. Nothing fancy, just things already sitting around the house.",
+            "audio_location_explanation": "",
+            "consolation": "Close, but not quite the list we used in the video.",
+            "consolation_voice_text": "Close, but that's not exactly the list we used in the video.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about what was sitting on the table right at the start.",
+            "hint_voice_text": "Here's a hint — think back to what was laid out on the table right at the very start.",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 1,
+            "question": "Why is it suggested to use two papers for covering the box?",
+            "voice_text": "Here's a fun one — why did I end up using two pieces of paper instead of just one to cover my box?",
+            "audio_location": "",
+            "options": [
+              { "label": "To ensure the paper does not tear easily", "value": "A" },
+              { "label": "Because the papers might be small and need to cover the box completely", "value": "B" },
+              { "label": "To make the pen holder more colorful", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "Two papers were used simply because the pieces on hand were small, so combining them covered the box fully.",
+            "explanation_voice_text": "Exactly — it was just because my paper pieces were a bit small, so combining two of them covered the whole box properly.",
+            "audio_location_explanation": "",
+            "consolation": "Good thought, but that wasn't the actual reason mentioned in the video.",
+            "consolation_voice_text": "Good thought, but that's not quite the reason given in the video.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about the size of the paper being used, not the color.",
+            "hint_voice_text": "Think size, not color — what was actually said about the paper itself?",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 2,
+            "question": "What should you do if glue leaves marks on the paper when designing the pen holder?",
+            "voice_text": "Last one — if your glue accidentally leaves a mark on the paper while you're working, what's the advice from the video?",
+            "audio_location": "",
+            "options": [
+              { "label": "Cover the marks with more paper", "value": "A" },
+              { "label": "Start over with new paper", "value": "B" },
+              { "label": "Consider it as part of the design", "value": "C" }
+            ],
+            "correct_option": "C",
+            "explanation": "Glue marks don't need to be hidden or fixed — you can simply treat them as part of your design, happy accidents included!",
+            "explanation_voice_text": "That's right — just let it be part of the design. Sometimes those little glue marks end up giving your pen stand its own unique character.",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — no need to redo anything here, the video had a simpler answer.",
+            "consolation_voice_text": "Not quite — and don't worry, there's no need to redo anything. The video had a much simpler answer than that.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Sometimes a 'mistake' can just become part of the art.",
+            "hint_voice_text": "Here's a hint — sometimes a little mistake can just become part of the art itself.",
+            "audio_location_hint": ""
+          }
+        ]
+      }
+    }
+
+  ]
+}

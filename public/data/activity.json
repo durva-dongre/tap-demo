@@ -1,0 +1,528 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "flow_id": "daily_activity_v1",
+    "type": "daily_activity_flow",
+    "description": "Runs once per day per student, looping per unit: Greeting → Video → Submission → Quiz (3 questions) → Submission Review → Score → Continue or End. Dynamic steps pull content from the active course's courses/{course}.json via content_ref.",
+    "nextjs_notes": [
+      "Resolve part_of_day (Morning / Afternoon / Evening / Night) from system time before rendering DA-01.",
+      "Resolve {{unit_name}} and {{course_display}} from the student's current course + unit_index before rendering DA-02. voice_text for DA-02 is pre-written generically to avoid reading raw unit-name strings awkwardly — swap in a TTS-friendly version per unit if needed later.",
+      "type:dynamic steps must fetch their content_ref object from courses/{selected_course}.json at units[current_unit_index] before rendering. Use the path field to locate the exact node.",
+      "render_key naming uses {course} and {unit} placeholders, resolve them to the actual course id and unit_index, e.g. quiz-science-1-q1.",
+      "[video-{course}-{unit}] renders the VideoPlayer component using the unit's video object.",
+      "[submission-{course}-{unit}] renders the SubmissionCard component using the unit's submission object.",
+      "[quiz-{course}-{unit}] is a render hint marking where the quiz sub-flow begins inline, the actual rendering is driven by the DA-QUIZ-* steps below.",
+      "[Xpts] or [+Xpts] renders the animated point-badge component and increments the points balance in state.",
+      "Each quiz question step (DA-QUIZ-N) renders QuizQuestion using content_ref. on_correct.next_step and on_wrong.next_step branch based on the student's tapped option vs correct_option.",
+      "DA-QUIZ-N-WRONG steps render QuizFeedback (consolation + hint, then explanation after retry or skip) and offer Try Again or Next as buttons — never free text.",
+      "audio_location_cheer_up on a wrong-answer step is a short pep-talk audio clip distinct from the consolation voice_text, play it right after consolation voice_text finishes, before the hint is revealed.",
+      "After DA-QUIZ-3 resolves, always continue to DA-11 (submission review) regardless of last question's correctness.",
+      "DA-11 triggers an async backend review job, show a lightweight 'reviewing...' indicator until DA-12 is ready to render.",
+      "DA-12's display_text and voice_text are intentionally hardcoded per spec, not derived from actual review content, future versions may template this from a real review-result object.",
+      "DA-14 (ScoreSummary) pulls quiz_scores, submission_pts, video_pts, and total_today from session state, not from courses.json.",
+      "On 'continue', increment current_unit_index, fetch the next unit via DA-NEXT-UNIT, then loop back to DA-01.",
+      "On 'later', end at DA-END. Next session resumes at DA-01 with the same unit_index (no auto-increment on exit).",
+      "Persist video_done, submission_done, and quiz_scores[] in session cache for the duration of the day's loop, then clear on loop completion.",
+      "quiz_fallback_guide fires only on free text at a quiz button step, it never advances the flow."
+    ]
+  },
+
+  "steps": [
+
+    {
+      "step_id": "DA-01",
+      "index": 1,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Good {{part_of_day}} {{name}} ☀️",
+      "voice_text": "Good day to you! Hope you're feeling good and ready to learn.",
+      "note": "part_of_day resolves to Morning / Afternoon / Evening / Night for display_text only.",
+      "next_step": "DA-02",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-02",
+      "index": 2,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Today we'll be learning {{unit_name}} from your {{course_display}} course. Exciting stuff ahead 🔥",
+      "voice_text": "Today we've got a brand new topic lined up for you, and trust me, it's a good one. Let's dive in!",
+      "note": "unit_name and course_display resolve from student progress and courses.json for display_text only.",
+      "next_step": "DA-03",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-03",
+      "index": 3,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Let's start with a video. In this video you'll learn: \"{{video_description}}\" 🎬",
+      "voice_text": "Let's kick things off with a short video — it's going to make this whole topic click for you.",
+      "note": "video_description pulled from content_ref video.description for display_text only.",
+      "next_step": "DA-04",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-04",
+      "index": 4,
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "content_ref": {
+        "source": "courses/{selected_course}.json",
+        "path": "units[current_unit_index].video",
+        "component": "VideoPlayer",
+        "render_key": "video-{course}-{unit}"
+      },
+      "display_text": "[video-{course}-{unit}]",
+      "note": "Render VideoPlayer. On video completion event, auto-advance to DA-05. If the student tries to skip, show skip_warning first and block advance until completion.",
+      "skip_warning": {
+        "display_text": "Hey, watch the full video to earn your points and unlock the next part! You've got this 💪",
+        "voice_text": "Hang on, don't skip just yet — finish the video so you can earn your points and unlock the next part. You've got this!"
+      },
+      "on_complete_event": "video_done",
+      "next_step": "DA-05",
+      "back_step": null,
+      "fallback_guide": "Watch the video above to continue — it's worth it, I promise! 🎬"
+    },
+
+    {
+      "step_id": "DA-05",
+      "index": 5,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Yayyy you crushed that video! [10pts] Keep going — every point counts 🌟",
+      "voice_text": "Yes! You crushed that video, that's ten points right there. Keep that momentum going, every point counts.",
+      "points_awarded": 10,
+      "note": "Auto-advances after 2 seconds.",
+      "next_step": "DA-06",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-06",
+      "index": 6,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Now it's time to earn some more points 💰 Send in your submission below!",
+      "voice_text": "Alright, time to earn even more points — go ahead and send in your submission below.",
+      "next_step": "DA-07",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-07",
+      "index": 7,
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "content_ref": {
+        "source": "courses/{selected_course}.json",
+        "path": "units[current_unit_index].submission",
+        "component": "SubmissionCard",
+        "render_key": "submission-{course}-{unit}"
+      },
+      "display_text": "[submission-{course}-{unit}]",
+      "note": "Render SubmissionCard. Student picks one emoji reaction and may optionally view reference examples. On submission, store the result and wait delay_after_submit_ms before advancing.",
+      "delay_after_submit_ms": 10000,
+      "next_step": "DA-08",
+      "back_step": null,
+      "fallback_guide": "Do the submission above champ — I'm waiting on you! Just pick your emoji and tap send 😄"
+    },
+
+    {
+      "step_id": "DA-08",
+      "index": 8,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "[+25pts] I am SO proud of you {{name}} 🥹 That's the spirit!",
+      "voice_text": "I am so, so proud of you right now — that's twenty five points, well earned. That's exactly the spirit!",
+      "points_awarded": 25,
+      "note": "Shown after delay_after_submit_ms following submission.",
+      "next_step": "DA-09",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-09",
+      "index": 9,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Now let's test what you've learnt 🧠 Quiz time — let's go!",
+      "voice_text": "Now let's see what stuck — quiz time, let's go!",
+      "next_step": "DA-10",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-10",
+      "index": 10,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "We've got 3 questions coming your way. Take your time — think, then tap! 💡",
+      "voice_text": "Three questions coming your way. No rush at all — just think it through, then tap your answer.",
+      "next_step": "DA-QUIZ-1",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-QUIZ-1",
+      "index": "10a",
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "content_ref": {
+        "source": "courses/{selected_course}.json",
+        "path": "units[current_unit_index].quiz.questions[0]",
+        "component": "QuizQuestion",
+        "render_key": "quiz-{course}-{unit}-q1"
+      },
+      "display_text": "[quiz-{course}-{unit}-q1]",
+      "question_number": 1,
+      "on_correct": { "next_step": "DA-QUIZ-1-CORRECT" },
+      "on_wrong": { "next_step": "DA-QUIZ-1-WRONG" },
+      "back_step": "DA-10",
+      "fallback_guide": "Tap one of the answer options above — just trust your gut! 💭"
+    },
+
+    {
+      "step_id": "DA-QUIZ-1-CORRECT",
+      "index": "10b",
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "That's right! 🎯 You really paid attention. On to the next one!",
+      "voice_text": "That's right, nicely done! You were clearly paying attention. Let's move on to the next one.",
+      "next_step": "DA-QUIZ-MOTIVATE-1",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-QUIZ-1-WRONG",
+      "index": "10c",
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "audio_location_cheer_up": "",
+      "note": "Render consolation text first, play audio_location then audio_location_cheer_up, then reveal hint from content_ref. If retried and wrong again or skipped, explanation may be shown via QuizFeedback.",
+      "content_ref": {
+        "source": "courses/{selected_course}.json",
+        "path": "units[current_unit_index].quiz.questions[0]",
+        "fields": ["consolation", "hint", "explanation"],
+        "component": "QuizFeedback"
+      },
+      "options": [
+        { "label": "Try again 🔁", "value": "retry_q1", "next_step": "DA-QUIZ-1" },
+        { "label": "Next question ➡️", "value": "next", "next_step": "DA-QUIZ-MOTIVATE-1" }
+      ],
+      "back_step": null,
+      "fallback_guide": "Tap 'Try again' to reattempt or 'Next question' to move on!"
+    },
+
+    {
+      "step_id": "DA-QUIZ-MOTIVATE-1",
+      "index": "10d",
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Keep it up {{name}} — halfway there! You're doing great 💪",
+      "voice_text": "Keep it up, you're already halfway there. You're doing great!",
+      "next_step": "DA-QUIZ-2",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-QUIZ-2",
+      "index": "10e",
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "content_ref": {
+        "source": "courses/{selected_course}.json",
+        "path": "units[current_unit_index].quiz.questions[1]",
+        "component": "QuizQuestion",
+        "render_key": "quiz-{course}-{unit}-q2"
+      },
+      "display_text": "[quiz-{course}-{unit}-q2]",
+      "question_number": 2,
+      "on_correct": { "next_step": "DA-QUIZ-2-CORRECT" },
+      "on_wrong": { "next_step": "DA-QUIZ-2-WRONG" },
+      "back_step": null,
+      "fallback_guide": "Tap one of the answer options above! You've got this 💭"
+    },
+
+    {
+      "step_id": "DA-QUIZ-2-CORRECT",
+      "index": "10f",
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Nailed it again! 🔥 One more question to go — you're on fire!",
+      "voice_text": "Nailed it again! Just one more question to go, you are on fire right now.",
+      "next_step": "DA-QUIZ-MOTIVATE-2",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-QUIZ-2-WRONG",
+      "index": "10g",
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "audio_location_cheer_up": "",
+      "note": "Render consolation text first, play audio_location then audio_location_cheer_up, then reveal hint from content_ref. If retried and wrong again or skipped, explanation may be shown via QuizFeedback.",
+      "content_ref": {
+        "source": "courses/{selected_course}.json",
+        "path": "units[current_unit_index].quiz.questions[1]",
+        "fields": ["consolation", "hint", "explanation"],
+        "component": "QuizFeedback"
+      },
+      "options": [
+        { "label": "Try again 🔁", "value": "retry_q2", "next_step": "DA-QUIZ-2" },
+        { "label": "Next question ➡️", "value": "next", "next_step": "DA-QUIZ-MOTIVATE-2" }
+      ],
+      "back_step": null,
+      "fallback_guide": "Tap 'Try again' or 'Next question' to continue!"
+    },
+
+    {
+      "step_id": "DA-QUIZ-MOTIVATE-2",
+      "index": "10h",
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Last one {{name}}! Give it everything you've got 🚀",
+      "voice_text": "This is the last one — give it everything you've got!",
+      "next_step": "DA-QUIZ-3",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-QUIZ-3",
+      "index": "10i",
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "content_ref": {
+        "source": "courses/{selected_course}.json",
+        "path": "units[current_unit_index].quiz.questions[2]",
+        "component": "QuizQuestion",
+        "render_key": "quiz-{course}-{unit}-q3"
+      },
+      "display_text": "[quiz-{course}-{unit}-q3]",
+      "question_number": 3,
+      "on_correct": { "next_step": "DA-QUIZ-3-CORRECT" },
+      "on_wrong": { "next_step": "DA-QUIZ-3-WRONG" },
+      "back_step": null,
+      "fallback_guide": "You're almost there — just tap your answer above! 💭"
+    },
+
+    {
+      "step_id": "DA-QUIZ-3-CORRECT",
+      "index": "10j",
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Three for three?! You absolute legend 🏆 Quiz done!",
+      "voice_text": "Three for three! You are an absolute legend. That's the quiz wrapped up.",
+      "next_step": "DA-11",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-QUIZ-3-WRONG",
+      "index": "10k",
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "audio_location_cheer_up": "",
+      "note": "Render consolation text first, play audio_location then audio_location_cheer_up, then reveal hint from content_ref. If retried and wrong again or skipped, explanation may be shown via QuizFeedback.",
+      "content_ref": {
+        "source": "courses/{selected_course}.json",
+        "path": "units[current_unit_index].quiz.questions[2]",
+        "fields": ["consolation", "hint", "explanation"],
+        "component": "QuizFeedback"
+      },
+      "options": [
+        { "label": "Try again 🔁", "value": "retry_q3", "next_step": "DA-QUIZ-3" },
+        { "label": "See results ➡️", "value": "next", "next_step": "DA-11" }
+      ],
+      "back_step": null,
+      "fallback_guide": "Tap 'Try again' or 'See results' to move on!"
+    },
+
+    {
+      "step_id": "DA-11",
+      "index": 11,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "Quiz done! While your submission gets reviewed, sit tight — I'll be back with feedback soon 🕐",
+      "voice_text": "Quiz's all done. While your submission is being looked over, just sit tight — I'll be right back with some feedback.",
+      "note": "Triggers an async backend review job. Show a lightweight 'review in progress' indicator until DA-12 is ready.",
+      "next_step": "DA-12",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-12",
+      "index": 12,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "I reviewed your work champ and here's what I think: you showed real effort and creativity today — that's what learning looks like 🌱 Keep building on this every day.",
+      "voice_text": "Alright champ, I went through your work, and here's what I think — you showed real effort and creativity today, and honestly, that's exactly what learning looks like. Keep building on this, one day at a time.",
+      "note": "Hardcoded per spec. Future versions may template this from an actual review-result object.",
+      "next_step": "DA-13",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-13",
+      "index": 13,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "display_text": "You did so well today {{name}} 🥳 Want to know your score?",
+      "voice_text": "You did so well today. Want to know your score?",
+      "options": [
+        { "label": "Yes yes yes! 🙌🙌🙌", "value": "show_score", "next_step": "DA-14" }
+      ],
+      "back_step": null,
+      "fallback_guide": "Tap 'Yes yes yes!' to see your score! 🙌"
+    },
+
+    {
+      "step_id": "DA-14",
+      "index": 14,
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "[champ-score]",
+      "voice_text": "Here's how today added up for you.",
+      "note": "Render ScoreSummary component. Scores pulled from session state, not from courses.json.",
+      "content_ref": {
+        "component": "ScoreSummary",
+        "render_key": "champ-score",
+        "fields_from_session": ["quiz_scores", "submission_pts", "video_pts", "total_today"]
+      },
+      "next_step": "DA-15",
+      "back_step": null,
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-15",
+      "index": 15,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "buttons_only",
+      "audio_location": "",
+      "display_text": "Good job champ 🤜🤛 Ready for more or shall we pick up tomorrow?",
+      "voice_text": "Good job today. Are you up for a bit more, or should we pick this up tomorrow?",
+      "options": [
+        {
+          "label": "Let's go! 🚀",
+          "value": "continue",
+          "next_step": "DA-NEXT-UNIT",
+          "note": "Advances to the next unit. Increment current_unit_index on selection."
+        },
+        {
+          "label": "Maybe later 😴",
+          "value": "later",
+          "next_step": "DA-END"
+        }
+      ],
+      "back_step": null,
+      "fallback_guide": "Tap 'Let's go!' to keep learning or 'Maybe later' to rest — either way you did amazing today!"
+    },
+
+    {
+      "step_id": "DA-NEXT-UNIT",
+      "index": "15a",
+      "type": "dynamic",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "content_ref": {
+        "source": "courses/{selected_course}.json",
+        "path": "units[next_unit_index]",
+        "component": "UnitPreviewCard",
+        "render_key": "{course}-unit-{next_unit_index}"
+      },
+      "display_text": "[{course}-unit-{next_unit_index}]",
+      "voice_text": "Here's a sneak peek at what's coming up next.",
+      "note": "Shows the title of the next unit, then loops back to DA-01 with updated unit context.",
+      "next_step": "DA-01",
+      "back_step": "DA-15",
+      "fallback_guide": null
+    },
+
+    {
+      "step_id": "DA-END",
+      "index": 16,
+      "type": "static",
+      "sender": "bot",
+      "input_mode": "static",
+      "audio_location": "",
+      "display_text": "I'll see you tomorrow {{name}} — rest well, you've earned it 💤 Same time tomorrow?",
+      "voice_text": "Alright then, I'll see you tomorrow. Rest well, you've definitely earned it. Same time tomorrow?",
+      "note": "End of daily loop. Flow resumes next session at DA-01 with the same unit_index.",
+      "next_step": null,
+      "back_step": null,
+      "fallback_guide": null
+    }
+
+  ]
+}

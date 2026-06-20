@@ -1,0 +1,240 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "course_id": "coding",
+    "course_display": "💻 Coding",
+    "description": "Two-unit introductory coding course covering sequences and loops for young learners.",
+    "nextjs_notes": [
+      "Import as a static JSON or fetch from /api/courses/coding.",
+      "Index units by units[current_unit_index].",
+      "VideoPlayer props: { title, youtube_url, points, audio_location, voice_text }",
+      "SubmissionCard props: { prompt, voice_text, emoji_options[], reference_submissions[], audio_location }",
+      "QuizQuestion props: { question, voice_text, options[], correct_option, audio_location }",
+      "QuizFeedback props (shown on wrong answer): { consolation, consolation_voice_text, audio_location_consolation, audio_location_cheer_up, hint, hint_voice_text, audio_location_hint, explanation, explanation_voice_text, audio_location_explanation }",
+      "voice_text fields are the spoken-aloud script for their sibling text field, written naturally for TTS.",
+      "audio_location_cheer_up is a short distinct pep-talk clip played after the consolation voice line and before the hint is revealed.",
+      "After a quiz finishes, post { unit_id, q1_correct, q2_correct, q3_correct } to /api/progress.",
+      "After a submission, post { unit_id, emoji_chosen } to /api/submissions."
+    ]
+  },
+
+  "course_id": "coding",
+  "course_display": "💻 Coding",
+  "units": [
+
+    {
+      "unit_index": 0,
+      "unit_id": "coding-sequences-u1",
+      "unit_name": "Sequences — Give Computers Instructions",
+      "audio_location": "",
+
+      "video": {
+        "title": "Think Like a Computer 🤖",
+        "description": "Computers don't guess — they follow exact instructions, one step at a time. Learn what a sequence is and why order matters more than you think.",
+        "voice_text": "Alright, here's a challenge. Imagine I asked you to make a sandwich — but I didn't tell you to put the bread down first. You'd end up with a mess, right? Computers have the exact same problem. They only do what you tell them to do, in exactly the order you tell them. That's called a sequence — and it's the first superpower of every coder. Let's figure out how it works.",
+        "youtube_url": "https://www.youtube.com/watch?v=kwbfdIwA69A",
+        "points": 10,
+        "audio_location": "",
+        "render_key": "coding-sequences-u1-video"
+      },
+
+      "submission": {
+        "prompt": "Write a sequence of 5 steps to teach a robot how to sharpen a pencil. Number each step clearly. Share a photo of your notebook! ✏️🤖",
+        "voice_text": "Your turn to be the programmer! Imagine a robot that has never seen a pencil sharpener before — it knows nothing. Write it 5 exact steps to sharpen a pencil. Number each step. Think carefully about the order — if you get step 3 before step 2, the robot will have a very bad time. Snap a photo when you're done and share it!",
+        "audio_location": "",
+        "points": 20,
+        "emoji_options": [
+          { "emoji": "🤖", "label": "I feel like a coder!" },
+          { "emoji": "🤯", "label": "This made me think hard" },
+          { "emoji": "😅", "label": "Harder than it looks!" }
+        ],
+        "reference_submissions": [
+          { "title": "Arjun's Robot Instructions", "description": "Step 1: Pick up the pencil. Step 2: Open the sharpener lid. Step 3: Insert the pencil. Step 4: Turn the pencil clockwise 10 times. Step 5: Remove and check. Clear and logical!", "image_url": null },
+          { "title": "Nisha's Numbered Steps", "description": "Five neat numbered steps with a small drawing of a robot at the top. Great detail on which hand does what.", "image_url": null },
+          { "title": "Raj's Sequence", "description": "A step-by-step list written in two columns — the step on the left and a tiny sketch on the right. Creative and clear.", "image_url": null }
+        ],
+        "render_key": "coding-sequences-u1-submission"
+      },
+
+      "quiz": {
+        "render_key": "coding-sequences-u1-quiz",
+        "questions": [
+          {
+            "question_index": 0,
+            "question": "What is a sequence in coding?",
+            "voice_text": "First question — when coders talk about a sequence, what do they actually mean?",
+            "audio_location": "",
+            "options": [
+              { "label": "A random mix of instructions given all at once", "value": "A" },
+              { "label": "A set of instructions that run in a specific order, one after another", "value": "B" },
+              { "label": "A type of computer that plays music", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "A sequence is a list of instructions that a computer follows in order — one step at a time. Change the order, and the whole thing can go wrong. It's like a recipe: you can't frost a cake before you bake it!",
+            "explanation_voice_text": "A sequence is a set of instructions in order — one after another. That's it! Simple but powerful. A computer does exactly what you write, in exactly the order you write it. Think of it like a recipe — skip a step or swap them around and things go sideways fast.",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — sequences are all about order!",
+            "consolation_voice_text": "Not quite — but think about it this way: what's the key thing about a recipe that makes it work? It's the order! Let me give you a hint.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about making tea — you can't drink it before you pour the water. Instructions have to happen in the right order.",
+            "hint_voice_text": "Here's a hint: think about making tea. You boil water, then you pour it, then you add the teabag. If you switch those around, you get a very bad cup of tea. That's what a sequence is all about!",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 1,
+            "question": "A robot is told: Step 1 — Open door. Step 2 — Walk through. Step 3 — Close door. What happens if Step 1 and Step 2 are swapped?",
+            "voice_text": "Question two — this one is a little story problem. The robot's steps got mixed up. What goes wrong?",
+            "audio_location": "",
+            "options": [
+              { "label": "Nothing — robots can figure it out", "value": "A" },
+              { "label": "The robot tries to walk through a closed door", "value": "B" },
+              { "label": "The robot opens the door twice", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "If the robot tries to walk through before opening the door, it crashes into the closed door! Computers and robots don't think — they just follow the steps exactly. Getting the order right is the coder's job.",
+            "explanation_voice_text": "The robot would walk straight into a closed door — ouch! Computers don't think ahead or make adjustments. They follow the instructions you gave them, in the order you gave them. That's why getting the sequence right is so important — the robot trusts you completely.",
+            "audio_location_explanation": "",
+            "consolation": "Hmm, not quite — remember, robots follow instructions blindly!",
+            "consolation_voice_text": "Hmm, not quite — robots don't think for themselves! They just do what they're told, in the order they're told. What would happen if you tried to walk through a door that isn't open yet?",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "What is the state of the door when Step 2 happens in the wrong order? Is it open or closed?",
+            "hint_voice_text": "Here's your clue: if Step 1 is now Walk Through and Step 2 is Open Door — what is the state of the door when the robot tries to walk? Is the door open yet?",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 2,
+            "question": "Why is order important in a sequence of instructions?",
+            "voice_text": "Last question — big picture time. Why does the order of steps actually matter so much?",
+            "audio_location": "",
+            "options": [
+              { "label": "Because computers like things to look neat", "value": "A" },
+              { "label": "Because each step depends on the previous one being done correctly", "value": "B" },
+              { "label": "Because longer lists of steps always work better", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "Each step in a sequence often depends on the step before it being done correctly. Putting on your shoes depends on your socks being on first. Each step builds on the last one — that's what makes sequences so powerful.",
+            "explanation_voice_text": "Each step builds on the one before it. You can't put on your shoes before your socks. You can't eat a meal before it's cooked. In coding, steps are connected — each one creates the right conditions for the next. Get the order right, and everything works beautifully.",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — it's not about neatness or length!",
+            "consolation_voice_text": "Not quite! It's not about how neat or how long the list is. Think about whether each step needs something from the step before it.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about getting dressed. You can't put your shoes on before your socks, right? Each step needs the previous one to already be done.",
+            "hint_voice_text": "Here's a hint: imagine getting dressed. Shoes before socks? That doesn't work. Coat before shirt? Uncomfortable. Each step sets things up for the next one — that's the whole point of a sequence.",
+            "audio_location_hint": ""
+          }
+        ]
+      }
+    },
+
+    {
+      "unit_index": 1,
+      "unit_id": "coding-loops-u2",
+      "unit_name": "Loops — Don't Repeat Yourself!",
+      "audio_location": "",
+
+      "video": {
+        "title": "Why Write It Once When You Can Loop It? 🔁",
+        "description": "Imagine writing the same instruction 100 times. Exhausting! Loops let coders repeat actions automatically — and they're one of the most satisfying tricks in all of coding.",
+        "voice_text": "Imagine I asked you to write 'I will not run in class' 50 times. That's punishment, not coding! But what if you could just tell a computer — hey, do this 50 times — and it just does it? That's a loop. And honestly, once you get loops, you'll start seeing them everywhere. Your alarm clock? Loop. A washing machine cycle? Loop. Let's break it down.",
+        "youtube_url": "https://www.youtube.com/watch?v=NptkXdpxxNU",
+        "points": 10,
+        "audio_location": "",
+        "render_key": "coding-loops-u2-video"
+      },
+
+      "submission": {
+        "prompt": "Write a loop in plain words! Describe something you do every morning, then rewrite it as a loop. Example: 'Repeat 7 times: brush teeth for 30 seconds.' Share a photo! 🔁",
+        "voice_text": "Now you're going to write your very own loop — no computer needed, just words! Think of something you do over and over in your morning routine. Then rewrite it as a loop using this format: Repeat this many times — then what you do. For example: Repeat 7 times — brush teeth for 30 seconds. Try to write two loops if you're feeling confident. Snap a photo and share it!",
+        "audio_location": "",
+        "points": 20,
+        "emoji_options": [
+          { "emoji": "🔁", "label": "Loop master unlocked!" },
+          { "emoji": "💡", "label": "That clicked for me!" },
+          { "emoji": "😬", "label": "Still a bit unsure" }
+        ],
+        "reference_submissions": [
+          { "title": "Simran's Morning Loop", "description": "Repeat 60 times: take one step while walking to school. A creative and perfectly correct loop!", "image_url": null },
+          { "title": "Karan's Breakfast Loop", "description": "Repeat 10 times: scoop cereal and eat. Simple, accurate, and a great real-life example.", "image_url": null },
+          { "title": "Divya's Double Loop Page", "description": "Two loops written side by side — one for brushing teeth and one for drinking water sip by sip. Excellent effort!", "image_url": null }
+        ],
+        "render_key": "coding-loops-u2-submission"
+      },
+
+      "quiz": {
+        "render_key": "coding-loops-u2-quiz",
+        "questions": [
+          {
+            "question_index": 0,
+            "question": "What does a loop do in a program?",
+            "voice_text": "First question — in your own understanding now, what is a loop actually doing inside a program?",
+            "audio_location": "",
+            "options": [
+              { "label": "It deletes old instructions", "value": "A" },
+              { "label": "It repeats a set of instructions a number of times", "value": "B" },
+              { "label": "It makes the program run faster by skipping steps", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "A loop tells the program to repeat the same instructions a set number of times — or until a condition is met. Instead of writing the same thing 100 times, you write it once inside a loop and tell it how many times to repeat.",
+            "explanation_voice_text": "A loop repeats a set of instructions — as many times as you tell it to. So instead of writing 'jump' a hundred times, you write jump once inside a loop and say: do this 100 times. The computer handles the rest. Efficient and elegant!",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — loops are all about repetition!",
+            "consolation_voice_text": "Not quite — think about what 'loop' even sounds like. Going around and around — that's repetition! Let me help you lock it in.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "Think about a clock ticking — it does the same thing, tick, over and over. That's exactly what a loop does with instructions.",
+            "hint_voice_text": "Here's a clue: a clock ticks every second, forever — the same action, repeated constantly. A loop in coding works the same way — it repeats instructions again and again, as many times as you need.",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 1,
+            "question": "A coder wants to print 'Hello!' exactly 5 times. Which approach is better?",
+            "voice_text": "Question two — two approaches, one smart choice. Which way would you use?",
+            "audio_location": "",
+            "options": [
+              { "label": "Write 'print Hello!' five separate times in the code", "value": "A" },
+              { "label": "Write 'print Hello!' once inside a loop that repeats 5 times", "value": "B" },
+              { "label": "Both are equally good — it doesn't matter", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "A loop is far better! If you need to change the message later, you only change it in one place, not five. And if you needed it 500 times instead of 5, the loop still only needs one line of code. That's the real magic.",
+            "explanation_voice_text": "Using a loop is definitely better! Write it once, repeat it five times. Now imagine you need to change the message — with the loop, you change one line. If you wrote it five times, you'd change five lines. And if it were 500 times? You'd be there all day. One loop, done.",
+            "audio_location_explanation": "",
+            "consolation": "Close — but one of these is much smarter for a coder!",
+            "consolation_voice_text": "Close, but there's a smarter option here! Think about which one a coder would thank themselves for later.",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "What if the number changed from 5 to 500? Which approach would be easier to update?",
+            "hint_voice_text": "Here's your hint: imagine the task changed from 5 times to 500 times. With one approach you change one number. With the other you'd have to write 500 lines. Which sounds like the smart choice?",
+            "audio_location_hint": ""
+          },
+          {
+            "question_index": 2,
+            "question": "Which of these real-life things is most like a loop?",
+            "voice_text": "Last question — now let's connect coding to real life. Which of these is most like a loop?",
+            "audio_location": "",
+            "options": [
+              { "label": "Writing your name on a piece of paper once", "value": "A" },
+              { "label": "A fan blade spinning round and round", "value": "B" },
+              { "label": "Eating one apple", "value": "C" }
+            ],
+            "correct_option": "B",
+            "explanation": "A fan blade spinning round and round is exactly like a loop — it repeats the same movement over and over. Writing your name once or eating one apple are single actions, not repeated ones.",
+            "explanation_voice_text": "A fan blade spinning is the perfect loop! It repeats the same rotation over and over — that's exactly what a loop does with instructions. Writing your name once or eating one apple are just single actions with no repetition. But that fan? It just keeps going.",
+            "audio_location_explanation": "",
+            "consolation": "Not quite — think about what repeats over and over!",
+            "consolation_voice_text": "Not quite! The key word in a loop is repeat. Which of those options does the same thing again and again and again?",
+            "audio_location_consolation": "",
+            "audio_location_cheer_up": "",
+            "hint": "A loop keeps doing something over and over. Which of the three options keeps repeating the same action?",
+            "hint_voice_text": "Think about which one never stops repeating. Writing your name ends. Eating an apple ends. But one of those options just keeps going and going — which is it?",
+            "audio_location_hint": ""
+          }
+        ]
+      }
+    }
+
+  ]
+}
