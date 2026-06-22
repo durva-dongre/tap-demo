@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { User, School, Phone, GraduationCap, Shuffle, ChevronRight, MapPin, Lock, Delete } from "lucide-react";
 import { useStudent, DEMO_PRESETS, Language } from "@/lib/student-context";
-import Image from "next/image";
 
 const LANGUAGES: Language[] = ["English", "Hindi", "Marathi", "Punjabi", "Kannada"];
 
+// cspell:disable
 const CITY_LOGOS = [
   { city: "Mumbai", src: "/logo/Mumbai.png" },
   { city: "Delhi", src: "/logo/Delhi.png" },
@@ -17,9 +18,9 @@ const CITY_LOGOS = [
   { city: "Jaipur", src: "/logo/Jaipur.png" },
   { city: "Ahmedabad", src: "/logo/Ahemdabad.png" },
 ];
+// cspell:enable
 
 const DEMO_PIN = process.env.NEXT_PUBLIC_DEMO_PIN ?? "1302";
-
 type Screen = "lock" | "logo" | "profile" | "welcome";
 
 export default function DemoPage() {
@@ -99,7 +100,6 @@ export default function DemoPage() {
             <h2 className="font-display font-extrabold text-xl" style={{ color: "var(--text-main)" }}>Enter PIN</h2>
             <p className="text-xs" style={{ color: "var(--text-muted)" }}>This demo is locked. Enter the 4-digit PIN to continue.</p>
           </div>
-
           <input
             value={pin}
             onChange={e => {
@@ -119,7 +119,6 @@ export default function DemoPage() {
           {pinError && (
             <p className="text-xs font-semibold -mt-3" style={{ color: "#E0524C" }}>Incorrect PIN, try again.</p>
           )}
-
           <div className="grid grid-cols-3 gap-2 w-full">
             {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map(d => (
               <button
@@ -150,7 +149,7 @@ export default function DemoPage() {
     return (
       <div className="flex min-h-screen" style={{ background: "var(--bg)" }}>
         <div
-          className="hidden lg:flex flex-col justify-between p-12 shrink-0 relative overflow-hidden"
+          className="hidden lg:flex flex-col p-12 shrink-0 relative overflow-hidden"
           style={{ width: "420px", background: "var(--lavender)", borderRight: "1px solid var(--border-soft)" }}
         >
           <div className="relative z-10">
@@ -161,11 +160,11 @@ export default function DemoPage() {
               Choose your<br />city
             </h1>
             <p className="text-base mt-4 leading-relaxed" style={{ color: "var(--lavender-strong)", opacity: 0.75 }}>
-              Each city has its own TAP chapter. Pick the one that's yours.
+              Each city has its own TAP chapter. Pick the one that&apos;s yours.
             </p>
           </div>
-          <div className="absolute bottom-0 right-0 z-0 pointer-events-none select-none" style={{ width: "260px" }}>
-            <img src="/assets/welcome.png" alt="" className="w-full object-contain object-bottom" draggable={false} />
+          <div className="absolute bottom-0 right-0 z-0 pointer-events-none select-none" style={{ width: "220px", maxHeight: "45%" }}>
+            <Image src="/assets/welcome.png" alt="" width={220} height={220} className="w-full h-full object-contain object-bottom" draggable={false} />
           </div>
         </div>
         <div className="flex flex-col flex-1 px-6 lg:px-16 py-10 overflow-y-auto">
@@ -194,7 +193,7 @@ export default function DemoPage() {
                     justifyContent: "center",
                   }}
                 >
-                  <img src={src} alt={`${city} logo`} className="w-12 h-12 object-contain" />
+                  <Image src={src} alt={`${city} logo`} width={48} height={48} className="object-contain" />
                   <span className="text-xs font-bold font-display flex items-center gap-1" style={{ color: isSelected ? "var(--lavender-strong)" : "var(--text-muted)" }}>
                     <MapPin size={11} strokeWidth={2.4} />{city}
                   </span>
@@ -217,13 +216,13 @@ export default function DemoPage() {
     return (
       <div className="flex min-h-screen" style={{ background: "var(--bg)" }}>
         <div
-          className="hidden lg:flex flex-col justify-between p-12 shrink-0 relative overflow-hidden"
+          className="hidden lg:flex flex-col p-12 shrink-0 relative overflow-hidden"
           style={{ width: "420px", background: "var(--lavender)", borderRight: "1px solid var(--border-soft)" }}
         >
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
               {selectedLogo ? (
-                <img src={selectedLogo} alt={selectedCity ?? "logo"} className="w-12 h-12 object-contain" />
+                <Image src={selectedLogo} alt={selectedCity ?? "logo"} width={48} height={48} className="object-contain" />
               ) : (
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--lavender-strong)" }}>
                   <span className="font-display font-extrabold text-base tracking-tight text-white">TAP</span>
@@ -233,18 +232,19 @@ export default function DemoPage() {
             <h1 className="font-display font-extrabold text-4xl leading-tight" style={{ color: "var(--lavender-strong)" }}>
               {selectedCity ? `${selectedCity} chapter` : "Your profile"}
             </h1>
+            {/* cspell:ignore personalise */}
             <p className="text-base mt-4 leading-relaxed" style={{ color: "var(--lavender-strong)", opacity: 0.75 }}>
               Tell us a little about yourself so we can personalise your experience.
             </p>
           </div>
-          <div className="absolute bottom-0 right-0 z-0 pointer-events-none select-none" style={{ width: "260px" }}>
-            <img src="/assets/welcome.png" alt="" className="w-full object-contain object-bottom" draggable={false} />
+          <div className="absolute bottom-0 right-0 z-0 pointer-events-none select-none" style={{ width: "220px", maxHeight: "45%" }}>
+            <Image src="/assets/welcome.png" alt="" width={220} height={220} className="w-full h-full object-contain object-bottom" draggable={false} />
           </div>
         </div>
         <div className="flex flex-col flex-1 px-6 lg:px-16 py-10 overflow-y-auto">
           <div className="flex items-center gap-3 mb-8">
             {selectedLogo ? (
-              <img src={selectedLogo} alt={selectedCity ?? "logo"} className="w-10 h-10 object-contain" />
+              <Image src={selectedLogo} alt={selectedCity ?? "logo"} width={40} height={40} className="object-contain" />
             ) : (
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "var(--lavender)", color: "var(--lavender-strong)" }}>
                 <span className="font-display font-extrabold text-sm tracking-tight">TAP</span>
@@ -308,32 +308,35 @@ export default function DemoPage() {
   return (
     <div className="flex min-h-screen" style={{ background: "var(--bg)" }}>
       <div
-        className="hidden lg:flex flex-col justify-between p-12 shrink-0 relative overflow-hidden"
+        className="hidden lg:flex flex-col p-12 shrink-0 relative overflow-hidden"
         style={{ width: "420px", background: "var(--lavender)", borderRight: "1px solid var(--border-soft)" }}
       >
-        <div className="relative z-10">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-8" style={{ background: "var(--lavender-strong)" }}>
-            <span className="font-display font-extrabold text-base tracking-tight text-white">TAP</span>
-          </div>
-          <h1 className="font-display font-extrabold text-4xl leading-tight" style={{ color: "var(--lavender-strong)" }}>
-            The Apprentice<br />Project
-          </h1>
-          <p className="text-base mt-4 leading-relaxed" style={{ color: "var(--lavender-strong)", opacity: 0.75 }}>
-            A personalised learning platform built for students across India's cities.
-          </p>
-        </div>
-        <div className="absolute bottom-0 right-0 z-0 pointer-events-none select-none" style={{ width: "260px" }}>
-          <img src="/assets/welcome.png" alt="" className="w-full object-contain object-bottom" draggable={false} />
-        </div>
-        <div className="relative z-10 flex flex-col gap-4">
-          {["Personalised lessons", "Audio-guided learning", "Earn points & badges"].map((f, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style={{ background: "var(--lavender-strong)" }}>
-                <span className="text-white text-xs font-bold">✓</span>
-              </div>
-              <p className="text-sm font-semibold" style={{ color: "var(--lavender-strong)" }}>{f}</p>
+        <div className="relative z-10 flex flex-col gap-8">
+          <div>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-8" style={{ background: "var(--lavender-strong)" }}>
+              <span className="font-display font-extrabold text-base tracking-tight text-white">TAP</span>
             </div>
-          ))}
+            <h1 className="font-display font-extrabold text-4xl leading-tight" style={{ color: "var(--lavender-strong)" }}>
+              The Apprentice<br />Project
+            </h1>
+            <p className="text-base mt-4 leading-relaxed" style={{ color: "var(--lavender-strong)", opacity: 0.75 }}>
+              A personalised learning platform built for students across India&apos;s cities. {/* cspell:ignore personalised */}
+            </p>
+          </div>
+          <div className="flex flex-col gap-4">
+            {/* cspell:ignore Personalised */}
+            {["Personalised lessons", "Audio-guided learning", "Earn points & badges"].map((f, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style={{ background: "var(--lavender-strong)" }}>
+                  <span className="text-white text-xs font-bold">✓</span>
+                </div>
+                <p className="text-sm font-semibold" style={{ color: "var(--lavender-strong)" }}>{f}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="absolute bottom-0 right-0 z-0 pointer-events-none select-none" style={{ width: "220px", maxHeight: "45%" }}>
+          <Image src="/assets/welcome.png" alt="" width={220} height={220} className="w-full h-full object-contain object-bottom" draggable={false} />
         </div>
       </div>
       <div className="flex flex-col flex-1 items-center justify-between px-6 lg:px-16 py-12">
@@ -345,8 +348,9 @@ export default function DemoPage() {
             <h1 className="font-display font-extrabold text-3xl leading-tight" style={{ color: "var(--text-main)" }}>
               Welcome, {name.trim() || "student"}
             </h1>
+            {/* cspell:ignore personalised */}
             <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
-              Your personalised learning buddy is ready. Let's begin your {selectedCity ? `${selectedCity} ` : ""}journey.
+              Your personalised learning buddy is ready. Let&apos;s begin your {selectedCity ? `${selectedCity} ` : ""}journey.
             </p>
           </div>
         </div>
